@@ -1,7 +1,7 @@
 clear all; clc;
 
-cp_data = load('bd_data.mat').data;
-% cp_data = load('BDT_DOP01.mat').data;
+% cp_data = load('bd_data.mat').data;
+cp_data = load('CPT_DOP01.mat').data;
 sst = cp_data;
 
 %------------------------------------------------------ Computation
@@ -15,7 +15,7 @@ sst = (sst - mean(sst))/sqrt(variance) ;
 n = length(sst);
 dt = 5.0/60.0 ;
 time = [0:length(sst)-1]*dt + 0.0*60 ;  % construct time array
-xlim = [0*60,4*60];  % plotting range
+xlim = [0*60,10*60];  % plotting range
 pad = 1;      % pad the time series with zeroes (recommended)
 dj = 0.25;    % this will do 4 sub-octaves per octave
 s0 = 2*dt;    % this says start at a scale of 6 months
@@ -37,13 +37,13 @@ global_ws = variance*(sum(power')/n);   % time-average over all times
 dof = n - scale;  % the -scale corrects for padding at edges
 global_signif = wave_signif(variance,dt,scale,1,lag1,-1,dof,mother);
 
-% Scale-average between El Nino periods of 2--8 years
-avg = find((scale >= 2) & (scale < 8));
+% Scale-average between El Nino periods of 10--30 minutes
+avg = find((scale >= 10) & (scale < 30));
 Cdelta = 0.776;   % this is for the MORLET wavelet
 scale_avg = (scale')*(ones(1,n));  % expand scale --> (J+1)x(N) array
 scale_avg = power ./ scale_avg;   % [Eqn(24)]
 scale_avg = variance*dj*dt/Cdelta*sum(scale_avg(avg,:));   % [Eqn(24)]
-scaleavg_signif = wave_signif(variance,dt,scale,2,lag1,-1,[2,7.9],mother);
+scaleavg_signif = wave_signif(variance,dt,scale,2,lag1,-1,[10,29.9],mother);
 
 whos
 
@@ -65,9 +65,9 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
 [xp,yp] = meshgrid(time, log2(period));
 pcolor(xp,yp,log2(power));
-caxis([0,5]);
+caxis([2,7]);
 colormap winter;
-colorbar;
+% colorbar;
 shading interp;
 
 % contour(time,log2(period),log2(power),log2(levels));  %*** or use 'contourfill'
@@ -104,13 +104,13 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YTickLabel','')
 set(gca,'XLim',[0,1.25*max(global_ws)])
 
-%--- Plot 2--8 yr scale-average time series
+%--- Plot 10--30 min scale-average time series
 subplot('position',[0.1 0.07 0.65 0.2])
 plot(time,scale_avg)
 set(gca,'XLim',xlim(:))
 xlabel('Time (year)')
 ylabel('Avg variance (degC^2)')
-title('d) 4-8 hr Scale-average Time Series')
+title('d) 10-30 min Scale-average Time Series')
 hold on
 plot(xlim,scaleavg_signif+[0,0],'--')
 hold off
