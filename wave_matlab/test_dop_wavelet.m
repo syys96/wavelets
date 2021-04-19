@@ -1,6 +1,7 @@
 clear all; clc;
 
-cp_data = load('cp_data.mat').data;
+cp_data = load('bd_data.mat').data;
+% cp_data = load('BDT_DOP01.mat').data;
 sst = cp_data;
 
 %------------------------------------------------------ Computation
@@ -13,8 +14,8 @@ sst = (sst - mean(sst))/sqrt(variance) ;
 
 n = length(sst);
 dt = 5.0/60.0 ;
-time = [0:length(sst)-1]*dt + 4.0*60 ;  % construct time array
-xlim = [4*60,8*60];  % plotting range
+time = [0:length(sst)-1]*dt + 0.0*60 ;  % construct time array
+xlim = [0*60,4*60];  % plotting range
 pad = 1;      % pad the time series with zeroes (recommended)
 dj = 0.25;    % this will do 4 sub-octaves per octave
 s0 = 2*dt;    % this says start at a scale of 6 months
@@ -62,14 +63,14 @@ subplot('position',[0.1 0.37 0.65 0.28])
 levels = [0.0625,0.125,0.25,0.5,1,2,4,8,16] * 4;
 Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
-% [xp,yp] = meshgrid(time, log2(period));
-% pcolor(xp,yp,log2(power));
-% % caxis([0,5]);
-% colormap winter;
-% colorbar;
-% shading interp;
+[xp,yp] = meshgrid(time, log2(period));
+pcolor(xp,yp,log2(power));
+caxis([0,5]);
+colormap winter;
+colorbar;
+shading interp;
 
-contourf(time,log2(period),log2(power),log2(levels));  %*** or use 'contourfill'
+% contour(time,log2(period),log2(power),log2(levels));  %*** or use 'contourfill'
 
 % imagesc(time,log2(period),log2(power));  %*** uncomment for 'image' plot
 
