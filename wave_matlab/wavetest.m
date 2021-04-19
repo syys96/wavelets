@@ -68,8 +68,18 @@ hold off
 subplot('position',[0.1 0.37 0.65 0.28])
 levels = [0.0625,0.125,0.25,0.5,1,2,4,8,16] ;
 Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
-contour(time,log2(period),log2(power),log2(levels));  %*** or use 'contourfill'
-%imagesc(time,log2(period),log2(power));  %*** uncomment for 'image' plot
+
+[xp,yp] = meshgrid(time, log2(period));
+pcolor(xp,yp,log2(power));
+caxis([0,5]);
+colormap cool;
+colorbar;
+shading interp;
+
+% contourf(time,log2(period),log2(power),log2(levels));  %*** or use 'contourfill'
+
+% imagesc(time,log2(period),log2(power));  %*** uncomment for 'image' plot
+
 xlabel('Time (year)')
 ylabel('Period (years)')
 title('b) NINO3 SST Wavelet Power Spectrum')
