@@ -1,7 +1,8 @@
 clear; clc;
 
 
-cp_data = load('tec_-70--60_-30.mat').nseq;
+cp_data = load('tec_-70--60_-30.mat').sig_fil;
+% cp_data = load('tec_-70--60_-30.mat').nseq;
 sst = cp_data;
 
 %------------------------------------------------------ Computation
@@ -14,8 +15,8 @@ sst = (sst - mean(sst))/sqrt(variance) ;
 
 n = length(sst);
 dt = 5.0/60.0;
-time = [0:length(sst)-1]*dt + 0.0*24 ;  % construct time array
-xlim = [0*24,5*24];  % plotting range
+time = [0:length(sst)-1]*dt/24 + 14.0 ;  % construct time array
+xlim = [14,14+(length(sst)/288)];  % plotting range
 pad = 1;      % pad the time series with zeroes (recommended)
 dj = 0.125/8;    % this will do 4 sub-octaves per octave
 s0 = 2*dt;    % this says start at a scale of 6 months
@@ -38,12 +39,12 @@ dof = n - scale;  % the -scale corrects for padding at edges
 global_signif = wave_signif(variance,dt,scale,1,lag1,-1,dof,mother);
 
 % Scale-average between El Nino periods of 10--30 minutes
-avg = find((scale >= 1) & (scale < 10));
+avg = find((scale >= 1) & (scale < 5));
 Cdelta = 0.776;   % this is for the MORLET wavelet
 scale_avg = (scale')*(ones(1,n));  % expand scale --> (J+1)x(N) array
 scale_avg = power ./ scale_avg;   % [Eqn(24)]
 scale_avg = variance*dj*dt/Cdelta*sum(scale_avg(avg,:));   % [Eqn(24)]
-scaleavg_signif = wave_signif(variance,dt,scale,2,lag1,-1,[1,9.9],mother);
+scaleavg_signif = wave_signif(variance,dt,scale,2,lag1,-1,[1,4.9],mother);
 
 whos
 
@@ -65,8 +66,8 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
 [xp,yp] = meshgrid(time, log2(period));
 pcolor(xp,yp,log2(power));
-caxis([0,3]);
-colormap winter;
+caxis([2,7]);
+colormap jet;
 % colorbar;
 shading interp;
 
@@ -87,7 +88,7 @@ hold on
 contour(time,log2(period),sig95,[-99,1],'k');
 hold on
 % cone-of-influence, anything "below" is dubious
-plot(time,log2(coi),'k')
+plot(time,log2(coi),'r')
 hold off
 
 %--- Plot global wavelet spectrum
