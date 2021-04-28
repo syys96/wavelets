@@ -1,8 +1,8 @@
 clear; clc;
 
 
-cp_data = load('tec_-70--60_-30.mat').sig_fil;
-% cp_data = load('tec_-70--60_-30.mat').nseq;
+% cp_data = load('tec_110-120_24.mat').sig_fil;
+cp_data = load('tec_110-120_24.mat').nseq;
 sst = cp_data;
 
 %------------------------------------------------------ Computation
@@ -66,7 +66,7 @@ Yticks = 2.^(fix(log2(min(period))):fix(log2(max(period))));
 
 [xp,yp] = meshgrid(time, log2(period));
 pcolor(xp,yp,log2(power));
-caxis([2,7]);
+caxis([4,7]);
 colormap jet;
 % colorbar;
 shading interp;
@@ -85,7 +85,7 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YTickLabel',Yticks)
 % 95% significance contour, levels at -99 (fake) and 1 (95% signif)
 hold on
-contour(time,log2(period),sig95,[-99,1],'k');
+contour(time,log2(period),sig95,[-99,1],'y');
 hold on
 % cone-of-influence, anything "below" is dubious
 plot(time,log2(coi),'r')
@@ -105,7 +105,7 @@ set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YTickLabel','')
 set(gca,'XLim',[0,1.25*log10(max(global_ws))])
 
-%--- Plot 10--30 min scale-average time series
+%--- Plot 1--5 hour scale-average time series
 subplot('position',[0.1 0.07 0.65 0.2])
 plot(time,scale_avg)
 set(gca,'XLim',xlim(:))
