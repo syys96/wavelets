@@ -12,7 +12,7 @@ shape_tec = size(tec_data);
 
 plot_num = 5;
 
-lon_st = 110; lon_ed = 120;
+lon_st = -70; lon_ed = -60;
 lon_st_id = lon_st - min(glon) + 1;
 lon_ed_id = lon_ed - min(glon) + 1;
 
@@ -43,10 +43,12 @@ caxis([-12,12]);
 shading interp;
 
 
-lat_point = 24;
+lat_point = -40;
 lat_point_id = lat_point - min(gdlat) + 1;
 tec_point = tec_ava_lon(lat_point_id,:);
 mask = ~isnan(tec_point);
+sum(mask_m)
+sum(mask_m)/shape_tec(3)
 nseq = tec_point;
 nseq(~mask) = interp1(time(mask), tec_point(mask), time(~mask));
 
