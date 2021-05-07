@@ -10,7 +10,7 @@ shape_tec = size(tec_data);
 % pcolor(x, y, tec_data(:,:,100)');
 % shading interp;
 
-plot_num = 5;
+plot_num = 6;
 
 lon_st = -70; lon_ed = -60;
 lon_st_id = lon_st - min(glon) + 1;
@@ -43,7 +43,7 @@ caxis([-12,12]);
 shading interp;
 
 
-lat_point = -40;
+lat_point = 20;
 lat_point_id = lat_point - min(gdlat) + 1;
 tec_point = tec_ava_lon(lat_point_id,:);
 mask = ~isnan(tec_point);
@@ -69,6 +69,13 @@ date_ed = 31 + 28 + shape_tec(3)/288+14-1;
 dst = dst((date_st-1)*24+1:(date_ed)*24);
 subplot(plot_num,1,5);
 plot((1:shape_tec(3)/12)/24+14,dst);
+
+ae = load('ae_2015.mat').data;
+date_st = 31 + 28 + 14;
+date_ed = 31 + 28 + shape_tec(3)/288+14-1;
+ae = ae((date_st-1)*24+1:(date_ed)*24);
+subplot(plot_num,1,6);
+plot((1:shape_tec(3)/12)/24+14,ae);
 
 save(['tec_',num2str(lon_st),'-',num2str(lon_ed),'_',num2str(lat_point),...
     '.mat'], 'tec_point', 'nseq', 'sig_fil');
