@@ -1,7 +1,7 @@
 clear all; clc;
 
-% cp_data = load('bd_data.mat').data;
-cp_data = load('CPT_DOP01.mat').data;
+cp_data = load('bd_data.mat').data;
+% cp_data = load('CPT_DOP01.mat').data;
 sst = cp_data;
 
 %------------------------------------------------------ Computation
@@ -15,7 +15,7 @@ sst = (sst - mean(sst))/sqrt(variance) ;
 n = length(sst);
 dt = 5.0/60.0 ;
 time = [0:length(sst)-1]*dt + 0.0*60 ;  % construct time array
-xlim = [0*60,10*60];  % plotting range
+xlim = [0*60,4*60];  % plotting range
 pad = 1;      % pad the time series with zeroes (recommended)
 dj = 0.25;    % this will do 4 sub-octaves per octave
 s0 = 2*dt;    % this says start at a scale of 6 months
@@ -54,8 +54,8 @@ subplot('position',[0.1 0.75 0.65 0.2])
 plot(time,sst)
 set(gca,'XLim',xlim(:))
 xlabel('Time (Minutes)')
-ylabel('NINO3 SST (degC)')
-title('a) NINO3 Sea Surface Temperature (seasonal)')
+ylabel('Doppler Shift(Hz)')
+title('a) Doppler Shift')
 hold off
 
 %--- Contour plot wavelet power spectrum
@@ -76,7 +76,7 @@ shading interp;
 
 xlabel('Time (Minutes)')
 ylabel('Period (Minutes)')
-title('b) NINO3 SST Wavelet Power Spectrum')
+title('b) Doppler Shift Wavelet Power Spectrum')
 set(gca,'XLim',xlim(:))
 set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YDir','reverse', ...
@@ -96,7 +96,7 @@ plot(global_ws,log2(period))
 hold on
 plot(global_signif,log2(period),'--')
 hold off
-xlabel('Power (degC^2)')
+xlabel('Power (Hz^2)')
 title('c) Global Wavelet Spectrum')
 set(gca,'YLim',log2([min(period),max(period)]), ...
 	'YDir','reverse', ...
@@ -108,8 +108,8 @@ set(gca,'XLim',[0,1.25*max(global_ws)])
 subplot('position',[0.1 0.07 0.65 0.2])
 plot(time,scale_avg)
 set(gca,'XLim',xlim(:))
-xlabel('Time (year)')
-ylabel('Avg variance (degC^2)')
+xlabel('Time (Minutes)')
+ylabel('Avg variance (Hz^2)')
 title('d) 10-30 min Scale-average Time Series')
 hold on
 plot(xlim,scaleavg_signif+[0,0],'--')
